@@ -40,10 +40,12 @@ public class LoginController {
         return ResponseEntity.ok().body(bankingService.getUsers());
     }
 
-    @PostMapping("/user/save")
+    @PostMapping("/register")
     public ResponseEntity<Login>saveUser(@RequestBody Login user) {
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/save").toUriString());
-        return ResponseEntity.created(uri).body(bankingService.saveUser(user));
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/register").toUriString());
+       Login newUser=bankingService.saveUser(user);
+        bankingService.addRoleToUser(user.getEmail(), "ROLE_USER");
+        return ResponseEntity.created(uri).body(newUser);
     }
 
     @PostMapping("/role/save")
